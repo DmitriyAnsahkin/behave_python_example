@@ -2,10 +2,21 @@ from pages.base_page import BasePage
 
 
 class MainYandexPage(BasePage):
+    BUTTON_BY_NAME = '//*[text()="{button_name}"]/ancestor::button'
 
     INPUT_SEARCH = '//input[@class="input__control input__input"]'
-    BUTTON_SEARCH = '//span[text()="Найти"]/ancestor::button'
     CLEAR_SEARCH = '//input[@class="input__control"]'
-    SEC_BUTTON = '//div[text()="Найти"]/ancestor::button'
-    PIC_BUTTON = '//span[text()="Картинки"]'
     PIC_PUSH = '//span[text()="Видео"]' # тест
+
+    # первая картинка по запросы
+    FIRST_PICTURE = '(//a[contains(@href, ".jpg")])[1]'
+
+
+class SearchPage(MainYandexPage):
+    BUTTON_BY_NAME = '//*[text()="{button_name}"]'
+
+
+class Pictures(MainYandexPage):
+    BUTTON_BY_NAME = '//*[text()="{button_name}"]'
+
+

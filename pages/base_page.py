@@ -8,12 +8,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 
 class BasePage:
-
-    def __init__(self):
-        chrome_options = Options()
-        chrome_options.add_argument("--window-size=1920,1080")
-        self.driver = webdriver.Chrome(executable_path='C:/PycharmProjects/SeleniumTasks/webdrivers/chromedriver.exe',
-                                  chrome_options=chrome_options)
+    def __init__(self, driver):
+        self.driver = driver
 
     def get_element(self, xpath: str):
         """Метод получения вэб элемента по xpath
@@ -31,8 +27,16 @@ class BasePage:
             element = self.driver.find_element(By.XPATH, xpath)
         return element
 
-    def click(self, xpath):
+    def wait_clickable_element(self, xpath: str):
+        """
 
+        """
+        element = WebDriverWait(driver=self.driver, timeout=20).until(
+            expected_conditions.element_to_be_clickable((By.XPATH, xpath)))
+
+        return element
+
+    def click(self, xpath):
         element = self.get_element(xpath=xpath)
         element.click()
 
@@ -56,6 +60,11 @@ class BasePage:
 
     def element_hover(self, xpath):
 
-        element = self.get_element(xpath=xpath)
+        element = self.wait_clickable_element(xpath=xpath)
         action_chains = ActionChains(self.driver)
-        action_chains.move_to_element(element).perform()
+        action_chains.move_to_element(element).click().perform()
+
+    def click_button_by_name(self, button_name):
+        xpath = self.BUTTON_BY_NAME.format(button_name=button_name)
+        self.get_element(xpath=xpath)
+        self.click(xpath=xpath)
